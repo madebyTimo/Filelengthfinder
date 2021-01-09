@@ -6,8 +6,6 @@ import java.util.Scanner;
 /**
  * Fillengthfinder.
  * Finds recursively the Files with a minimum length in the given Directory.
- * 
- *
  */
 public class Filelengthfinder {
 
@@ -16,50 +14,73 @@ public class Filelengthfinder {
 
 	/**
 	 * main Class of the Filelengthfinder
-	 * @param pArgs Array of Configuration-Arguments
+	 * @param pArgs Array of commandline-Arguments
 	 */
 	public Filelengthfinder(final String[] pArgs) {
 		String path = null;
 		int length = -1;
+		boolean isSetUseFullPathName = false;
+		boolean isSetIncludeFoldernames = false;
 		for (int i = 0; i < pArgs.length; i++) {
-			if (pArgs[i].startsWith("--help") || pArgs[i].startsWith("-")) {
+			if (pArgs[i].startsWith("--help") || pArgs[i].startsWith("-h")) {
 				printHelpMessage();
-			} else if (pArgs[i].startsWith("-d=")) {
-				path = pArgs[i].substring(3);
-			} else if (pArgs[i].startsWith("-l=")) {
-				length = Integer.parseInt(pArgs[i].substring(3));
+			} else if (pArgs[i].startsWith("-dir=")) {
+				path = pArgs[i].substring(5);
+			} else if (pArgs[i].startsWith("-len=")) {
+				try {
+					length = Integer.parseInt(pArgs[i].substring(5));
+				} catch (NumberFormatException e) {
+					System.out.println("The input of \"-len=\" cannot be converted to a number");
+				}
+			} else if (pArgs[i].startsWith("-fph=")) {
+				if(pArgs[i].substring(5).equals("yes")) {
+					aUseFullPathName = true;
+					isSetUseFullPathName = true;
+				}else if(pArgs[i].substring(5).equals("no")) {
+					aUseFullPathName = false;
+					isSetUseFullPathName = true;
+				}
+			}else if (pArgs[i].startsWith("-fdn=")) {
+				if(pArgs[i].substring(5).equals("yes")) {
+					aIncludeFoldernames = true;
+					isSetIncludeFoldernames = true;
+				}else if(pArgs[i].substring(5).equals("no")) {
+					aIncludeFoldernames = false;
+					isSetIncludeFoldernames = true;
+				}
 			}
 		}
 		while (length == -1) {
 			System.out.println("How long should the filename at least be?");
-			length = Integer.parseInt(consoleScanner());
+			try {
+				length = Integer.parseInt(consoleScanner());
+			} catch (NumberFormatException e) {
+				System.out.println("The input cannot be converted to a number");
+			}
 		}
-		boolean correctInput = false;
-		while (!correctInput) {
+		while (!isSetUseFullPathName) {
 			System.out.println("Include the full path? (yes/no)");
 			String input = consoleScanner();
 			if (input.equals("yes")) {
 				aUseFullPathName = true;
-				correctInput = true;
+				isSetUseFullPathName = true;
 			} else if (input.equals("no")) {
 				aUseFullPathName = false;
-				correctInput = true;
+				isSetUseFullPathName = true;
 			}
 		}
-		correctInput = false;
 		if (!aUseFullPathName) {
-			while (!correctInput) {
+			while (!isSetIncludeFoldernames) {
 				System.out.println("Also search for foldernames? (yes/no)");
 				String input = consoleScanner();
 				if (input.equals("yes")) {
 					aIncludeFoldernames = true;
-					correctInput = true;
+					isSetIncludeFoldernames = true;
 				} else if (input.equals("no")) {
 					aIncludeFoldernames = false;
-					correctInput = true;
+					isSetIncludeFoldernames = true;
 				}
 			}
-			correctInput = false;
 		} else {
 			aIncludeFoldernames = true;
 		}
@@ -68,31 +89,48 @@ public class Filelengthfinder {
 			path = consoleScanner();
 		}
 
-		File directory = new File(path);
-		String filesFound = findFileWithLengthMin(length, directory);
-		System.out.println();
-		if (!filesFound.equals("")) {
-			System.out.println("Following files found:" + filesFound);
-		} else {
-			System.out.println("no files found");
+		try {
+			File directory = new File(path);
+			String filesFound = findFileWithLengthMin(length, directory);
+			System.out.println();
+			if (!filesFound.equals("")) {
+				System.out.println("Following files found:" + filesFound);
+			} else {
+				System.out.println("no files found");
+			}
+		} catch (NullPointerException e) {
+			System.out.println("The path " + path + " doesn't exist.");
 		}
 	}
 
 	/**
 	 * main Method of the {@link Filelengthfinder}
-	 * @param args Array of Console-Arguments
+	 * @param args Array of commandline-Arguments
 	 */
 	public static void main(String[] args) {
 		new Filelengthfinder(args);
 	}
 
+	/**
+	 * prints the help message to the commandline
+	 */
 	private void printHelpMessage() {
-		System.out.println("Usage:");
-		System.out.println("-d=DIRECTORY \n -l=LENGTH");
+		System.out.println("Filelengthfinder");
+		System.out.println("Searches recursively on all Folders for files with a filename with the minumum length");
 		System.out.println();
-		System.out.println("Searches recursively on all Folders for files with filename with the minumum length");
+		System.out.println("Usage:");
+		System.out.println("-dir= the path of the directory in which to search");
+		System.out.println("-len= the minimum length of the filename");
+		System.out.println("-fph= wether to use the full path as filename or not (yes/no)");		
+		System.out.println("-fdn= wether to include foldernames to the searched filenames or not (yes/no). If -fph=true then it is automaticcaly \"yes\".");
+		System.out.println();
+		System.out.println("Example: java -jar Filenamelengthfinder.jar -dir=/media -len=145 -fph=no -fdn=no");
 	}
 
+	/**
+	 * scans the commandline for the written line
+	 * @return the written line
+	 */
 	private String consoleScanner() {
 		Scanner scanner = new Scanner(System.in);
 		String eingabe = scanner.nextLine();

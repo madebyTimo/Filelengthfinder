@@ -3,8 +3,10 @@ This is a little program to search files with a filename which has a minumum len
 You can decide if you want to inculude foldernames or not and if you want to use the full path as name.
 
 ## Usage
-with
+With
+```bash
 java -jar Filenamelengthfinder.jar
+```
 it askes you with which arguments to run.
 
 With

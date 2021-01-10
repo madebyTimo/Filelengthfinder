@@ -10,10 +10,10 @@ java -jar Filenamelengthfinder.jar
 it askes you with which arguments to run.
 
 With
-java -jar Filenamelengthfinder.jar OPTIONS
 ```bash
-you can dirictly set the arguments.
+java -jar Filenamelengthfinder.jar OPTIONS
 ```
+you can dirictly set the arguments.
 To see all available options use:
 ```bash
 java -jar Filenamelengthfinder.jar --help

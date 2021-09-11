@@ -1,13 +1,14 @@
 package main;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class CLI {
 
-
 	/**
 	 * scans the commandline for the written line
+	 * 
 	 * @return the written line
 	 */
 	public String consoleScanner() {
@@ -17,7 +18,6 @@ public class CLI {
 		return eingabe;
 	}
 
-	
 	/**
 	 * 
 	 * Simple CLI menu to select one of the given options
@@ -46,6 +46,40 @@ public class CLI {
 			} catch (NumberFormatException e) {
 				return 0;
 			}
+		}
+
+	}
+
+	/**
+	 * 
+	 * Simple yes/no selection
+	 * 
+	 * @return true for yes, false for no
+	 */
+	public boolean showYesNoSelection() {
+		List<String> options = new ArrayList<String>();
+		options.add("yes");
+		options.add("no");
+		System.out.println();
+		int counter = 1;
+		for (String option : options) {
+			System.out.println(counter++ + ". " + option);
+		}
+		System.out.println();
+		System.out.print("Your selection: ");
+		String input = consoleScanner();
+		System.out.println();
+		while (true) {
+			try {
+				int selection = Integer.parseInt(input);
+				if(selection == 1) {
+					return true;
+				}else if(selection == 2) {
+					return false;
+				}
+			} catch (NumberFormatException e) {
+			}
+			System.out.println("Invalid Input");
 		}
 
 	}

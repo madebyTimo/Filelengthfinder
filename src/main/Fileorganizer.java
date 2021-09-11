@@ -16,7 +16,7 @@ public class Fileorganizer {
 	
 	
 	/**
-	 * main Method of the {@link Filelengthfinder}
+	 * main Method, creates a new object of the {@link Fileorganizer}
 	 * @param args Array of commandline-Arguments
 	 */
 	public static void main(String[] args) {

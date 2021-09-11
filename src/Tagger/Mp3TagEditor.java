@@ -29,5 +29,6 @@ public class Mp3TagEditor {
 		ID3v1 tag = song.getID3v1Tag();
 		tag.setSongTitle(tags.getTitle());
 		tag.setArtist(tags.getArtist());
+		song.setID3v1Tag(tag);
 	}
 }

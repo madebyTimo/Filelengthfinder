@@ -18,6 +18,12 @@ public class Mp3TagEditor {
 		return null;
 	}
 
+	
+	/**
+	 * Write the given MP3-Tags into the given MP3-file
+	 * @param file the file to edit
+	 * @param tags the tags to write
+	 */
 	public void writeTags(File file, Mp3Tags tags) {
 		try {
 			AudioFile audioFile = AudioFileIO.read(file);

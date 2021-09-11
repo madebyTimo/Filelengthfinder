@@ -3,6 +3,8 @@ package Tagger;
 import java.io.File;
 import java.util.ArrayList;
 
+import org.jaudiotagger.audio.exceptions.UnableToRenameFileException;
+
 import FileFinder.Filelengthfinder;
 import main.CLI;
 
@@ -40,7 +42,7 @@ public class MP3Tagger {
 			} else if (selection == 2) {
 				filenameToTags();
 			} else if (selection == 3) {
-				// TODO MP3Tags to Filename
+				tagsToFilename();
 			} else if (selection != -1) {
 				System.out.println("Invalid Input!");
 				selection = Integer.MIN_VALUE;
@@ -92,12 +94,37 @@ public class MP3Tagger {
 		}
 	}
 
-	private void getTagsFromFilename() {
+	private void tagsToFilename() {
+		selectPath();
+		if (file.isDirectory()) {
+			System.out.println("Do you want to search recursively in the directory?");
+			searchDirectoryRecursively = cli.showYesNoSelection();
+			for (File file : this.file.listFiles()) {
+				if (file.getName().endsWith(".mp3")) {
+					tagsToFilename(file);
+				} else {
+					System.out.println("File \"" + file.getAbsolutePath() + "\" is no MP3");
+				}
+			}
+		} else {
+			tagsToFilename(this.file);
+		}
+	}
 
+	private void tagsToFilename(final File file) {
+		if (file.getName().endsWith(".mp3")) {
+			Mp3Tags tags = tagEditor.readTags(file);
+			String oldPath = file.getAbsolutePath();
+			String newName = tags.getArtist() + " - " + tags.getTitle() + ".mp3";
+			renameFile(file, newName);
+			System.out.println("Edited Filename of \"" + oldPath + "\" to \"" + newName + "\"");
+		}
+		
 	}
 
 	private void renameFile(final File file, final String newName) {
-
+		File newFilePath = new File(file.getParent() + "/" + newName);
+		file.renameTo(newFilePath);
 	}
 
 }

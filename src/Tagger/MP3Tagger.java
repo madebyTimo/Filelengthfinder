@@ -70,7 +70,7 @@ public class MP3Tagger {
 
 	private void filenameToTags(final File file) {
 		if (file.getName().endsWith(".mp3")) {
-			String fileName = file.getName().substring(0, file.getName().length() - 5);
+			String fileName = file.getName().substring(0, file.getName().length() - 4);
 			String[] tags = fileName.split(" - ");
 			Mp3Tags mp3Tags = new Mp3Tags(tags[1], tags[0]);
 			this.tagEditor.writeTags(file, mp3Tags);

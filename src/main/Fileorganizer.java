@@ -3,7 +3,7 @@ package main;
 import java.util.ArrayList;
 
 import FileFinder.Filelengthfinder;
-import Tagger.MP3Tagger;
+import Tagger.Mp3Tagger;
 
 public class Fileorganizer {
 	
@@ -35,7 +35,7 @@ public class Fileorganizer {
 			if (selection == 1) {
 				new Filelengthfinder(cli);;
 			} else if (selection == 2) {
-				new MP3Tagger(cli);
+				new Mp3Tagger(cli);
 			} else if (selection != -1) {
 				System.out.println("Invalid Input!");
 				selection = Integer.MIN_VALUE;

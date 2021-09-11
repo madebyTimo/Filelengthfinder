@@ -15,7 +15,7 @@ import main.CLI;
  * Class to do things with MP3Tags 
  * 
  */
-public class MP3Tagger {
+public class Mp3Tagger {
 
 	private final CLI cli;
 	private File file;
@@ -26,17 +26,17 @@ public class MP3Tagger {
 	 * creates an MP3 Tagger
 	 * @param cli for interaction with CLI
 	 */
-	public MP3Tagger(final CLI cli) {
+	public Mp3Tagger(final CLI cli) {
 		this.cli = cli;
 		this.tagEditor = new Mp3TagEditor();
 		menu();
 	}
 
 	/**
-	 * show menu with options of the MP3Tagger
+	 * show menu with options of the Mp3Tagger
 	 */
 	private void menu() {
-		System.out.println("--> MP3Tagger menu");
+		System.out.println("--> Mp3Tagger menu");
 		ArrayList<String> menu = new ArrayList<String>();
 		menu.add("edit Tags");
 		menu.add("Filename to Tags");

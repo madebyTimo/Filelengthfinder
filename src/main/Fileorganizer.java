@@ -20,6 +20,7 @@ public class Fileorganizer {
 	 * @param args (non-null) the command line arguments
 	 */
 	public Fileorganizer(final String[] args) {
+		checkCommandLineArguments(args);
 		this.cli = new CLI();
 		mainMenu();
 	}

@@ -19,8 +19,8 @@ public class MP3Tagger {
 	 */
 	public MP3Tagger(final CLI cli) {
 		this.cli = cli;
-		menu();
 		this.tagEditor = new Mp3TagEditor();
+		menu();
 	}
 
 	/**
@@ -45,7 +45,7 @@ public class MP3Tagger {
 				System.out.println("Invalid Input!");
 				selection = Integer.MIN_VALUE;
 			}
-		} while (selection != Integer.MIN_VALUE);
+		} while (selection == Integer.MIN_VALUE);
 	}
 
 	/**

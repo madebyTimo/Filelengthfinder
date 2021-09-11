@@ -28,7 +28,8 @@ public class Mp3TagEditor {
 		try {
 			AudioFile audioFile = AudioFileIO.read(file);
 			Tag tag = audioFile.getTag();
-			tag.setField(FieldKey.ARTIST,"Kings of Leon");
+			tag.setField(FieldKey.ARTIST,tags.getArtist());
+			tag.setField(FieldKey.TITLE, tags.getTitle());
 			audioFile.commit();
 		} catch (Exception e) {
 			// TODO exception handling

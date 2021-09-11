@@ -15,6 +15,10 @@ public class Filelengthfinder {
 	boolean aIncludeFoldernames = false;
 	final CLI cli;
 
+	/**
+	 * Create new Filelengthfinder
+	 * @param cli for interaction with CLI
+	 */
 	public Filelengthfinder(final CLI cli) {
 		this(new String[0], cli);
 	}

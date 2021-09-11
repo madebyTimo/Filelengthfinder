@@ -34,6 +34,10 @@ public class Fileorganizer {
 		new Fileorganizer(args);
 	}
 	
+	
+	/**
+	 * show main Menu to choose which feature to use
+	 */
 	private void mainMenu() {
 		System.out.println("--> main menu");
 		ArrayList<String> mainMenu = new ArrayList<String>();

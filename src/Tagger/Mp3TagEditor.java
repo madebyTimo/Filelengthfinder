@@ -1,6 +1,10 @@
 package Tagger;
 
 import java.io.File;
+import org.jaudiotagger.audio.AudioFile;
+import org.jaudiotagger.audio.AudioFileIO;
+import org.jaudiotagger.tag.FieldKey;
+import org.jaudiotagger.tag.Tag;
 
 
 public class Mp3TagEditor {
@@ -14,7 +18,15 @@ public class Mp3TagEditor {
 		return null;
 	}
 
-	public void writeTags(File pSong, Mp3Tags tags) {
-
+	public void writeTags(File file, Mp3Tags tags) {
+		try {
+			AudioFile audioFile = AudioFileIO.read(file);
+			Tag tag = audioFile.getTag();
+			tag.setField(FieldKey.ARTIST,"Kings of Leon");
+			audioFile.commit();
+		} catch (Exception e) {
+			// TODO exception handling
+			e.printStackTrace();
+		}
 	}
 }

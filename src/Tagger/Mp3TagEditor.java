@@ -13,7 +13,6 @@ import org.jaudiotagger.tag.id3.AbstractID3v2Tag;
 import org.jaudiotagger.tag.id3.ID3v1Tag;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
-import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.Tag;
 
 
@@ -50,6 +49,9 @@ public class Mp3TagEditor {
 	 * @param tags the tags to write
 	 */
 	public void writeTags(File file, Mp3Tags tags) {
+		if(tags == null || file == null || !file.getName().endsWith(".mp3")) {
+			throw new IllegalArgumentException();
+		}
 		try {
 			AudioFile audioFile = AudioFileIO.read(file);
 			Tag tag = audioFile.getTag();

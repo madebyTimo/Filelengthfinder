@@ -2,12 +2,19 @@ package Tagger;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
 
 import org.jaudiotagger.audio.exceptions.UnableToRenameFileException;
 
 import FileFinder.Filelengthfinder;
 import main.CLI;
 
+
+/**
+ * Class to do things with MP3Tags 
+ * 
+ */
 public class MP3Tagger {
 
 	private final CLI cli;
@@ -16,7 +23,7 @@ public class MP3Tagger {
 	private final Mp3TagEditor tagEditor;
 
 	/**
-	 * 
+	 * creates an MP3 Tagger
 	 * @param cli for interaction with CLI
 	 */
 	public MP3Tagger(final CLI cli) {
@@ -58,11 +65,23 @@ public class MP3Tagger {
 		if (file.isDirectory()) {
 			System.out.println("Do you want to search recursively in the directory?");
 			searchDirectoryRecursively = cli.showYesNoSelection();
+			Queue<File> filesQueue = new LinkedList<>();
 			for (File file : this.file.listFiles()) {
-				if (file.getName().endsWith(".mp3")) {
-					filenameToTags(file);
-				} else {
-					System.out.println("File \"" + file.getAbsolutePath() + "\" is no MP3");
+				filesQueue.add(file);
+			}
+			File actualFile;
+			while(!filesQueue.isEmpty()) {
+				actualFile = filesQueue.remove();
+				if (!actualFile.isDirectory()) {
+					if (actualFile.getName().endsWith(".mp3")) {
+						filenameToTags(actualFile);
+					} else {
+						System.out.println("File \"" + actualFile.getAbsolutePath() + "\" is no MP3");
+					}
+				} else if (searchDirectoryRecursively) {
+					for (File newFile : actualFile.listFiles()) {
+						filesQueue.add(newFile);
+					}
 				}
 			}
 		} else {
@@ -70,6 +89,10 @@ public class MP3Tagger {
 		}
 	}
 
+	/**
+	 * edit the tags with information of the filename
+	 * @param file the file to be edited
+	 */
 	private void filenameToTags(final File file) {
 		if (file.getName().endsWith(".mp3")) {
 			String fileName = file.getName().substring(0, file.getName().length() - 4);
@@ -80,6 +103,10 @@ public class MP3Tagger {
 		}
 	}
 
+	
+	/**
+	 * let the user select a path over CLI
+	 */
 	private void selectPath() {
 		String path = null;
 		while (path == null || path.length() == 0) {
@@ -94,16 +121,31 @@ public class MP3Tagger {
 		}
 	}
 
+	/**
+	 * edit the filename with information of the tags at given files.
+	 */
 	private void tagsToFilename() {
 		selectPath();
 		if (file.isDirectory()) {
 			System.out.println("Do you want to search recursively in the directory?");
 			searchDirectoryRecursively = cli.showYesNoSelection();
+			Queue<File> filesQueue = new LinkedList<>();
 			for (File file : this.file.listFiles()) {
-				if (file.getName().endsWith(".mp3")) {
-					tagsToFilename(file);
-				} else {
-					System.out.println("File \"" + file.getAbsolutePath() + "\" is no MP3");
+				filesQueue.add(file);
+			}
+			File actualFile;
+			while(!filesQueue.isEmpty()) {
+				actualFile = filesQueue.remove();
+				if (!actualFile.isDirectory()) {
+					if (actualFile.getName().endsWith(".mp3")) {
+						tagsToFilename(actualFile);
+					} else {
+						System.out.println("File \"" + actualFile.getAbsolutePath() + "\" is no MP3");
+					}
+				} else if (searchDirectoryRecursively) {
+					for (File newFile : actualFile.listFiles()) {
+						filesQueue.add(newFile);
+					}
 				}
 			}
 		} else {
@@ -111,6 +153,10 @@ public class MP3Tagger {
 		}
 	}
 
+	/**
+	 * edit the filename with information of the tags
+	 * @param file the file to be edited
+	 */
 	private void tagsToFilename(final File file) {
 		if (file.getName().endsWith(".mp3")) {
 			Mp3Tags tags = tagEditor.readTags(file);
@@ -119,9 +165,14 @@ public class MP3Tagger {
 			renameFile(file, newName);
 			System.out.println("Edited Filename of \"" + oldPath + "\" to \"" + newName + "\"");
 		}
-		
+
 	}
 
+	/**
+	 * Rename the file
+	 * @param file file to be renamed
+	 * @param newName new name of the file
+	 */
 	private void renameFile(final File file, final String newName) {
 		File newFilePath = new File(file.getParent() + "/" + newName);
 		file.renameTo(newFilePath);

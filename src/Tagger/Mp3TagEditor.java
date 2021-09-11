@@ -11,15 +11,11 @@ public class Mp3TagEditor {
 
 	private MP3File song;
 	
-	public Mp3TagEditor(File pSong) {
-		try {
-			song = new MP3File(pSong);
-		}catch (IOException | TagException e) {
-			e.printStackTrace();
-		}		
+	public Mp3TagEditor() {		
 	}
 	
-	public Mp3Tags readTags() {
+	public Mp3Tags readTags(File pSong) throws IOException, TagException {
+		song = new MP3File(pSong);
 		ID3v1 tag = song.getID3v1Tag();
 		String artist = tag.getArtist();
 		String title = tag.getSongTitle();
@@ -28,7 +24,8 @@ public class Mp3TagEditor {
 		return tags;
 	}
 	
-	public void writeTags(Mp3Tags tags) {
+	public void writeTags(File pSong, Mp3Tags tags) throws IOException, TagException {
+		song = new MP3File(pSong);
 		ID3v1 tag = song.getID3v1Tag();
 		tag.setSongTitle(tags.getTitle());
 		tag.setArtist(tags.getArtist());

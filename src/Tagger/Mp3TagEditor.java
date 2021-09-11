@@ -11,6 +11,10 @@ import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.TagException;
 import org.jaudiotagger.tag.id3.AbstractID3v2Tag;
 import org.jaudiotagger.tag.id3.ID3v1Tag;
+import org.jaudiotagger.audio.AudioFile;
+import org.jaudiotagger.audio.AudioFileIO;
+import org.jaudiotagger.tag.FieldKey;
+import org.jaudiotagger.tag.Tag;
 
 
 public class Mp3TagEditor {
@@ -39,7 +43,21 @@ public class Mp3TagEditor {
 		return tags;
 	}
 
-	public void writeTags(File pSong, Mp3Tags tags) {
-
+	
+	/**
+	 * Write the given MP3-Tags into the given MP3-file
+	 * @param file the file to edit
+	 * @param tags the tags to write
+	 */
+	public void writeTags(File file, Mp3Tags tags) {
+		try {
+			AudioFile audioFile = AudioFileIO.read(file);
+			Tag tag = audioFile.getTag();
+			tag.setField(FieldKey.ARTIST,"Kings of Leon");
+			audioFile.commit();
+		} catch (Exception e) {
+			// TODO exception handling
+			e.printStackTrace();
+		}
 	}
 }

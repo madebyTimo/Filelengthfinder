@@ -1,3 +1,4 @@
+package FileFinder;
 import java.io.File;
 import java.io.FileFilter;
 import java.util.Scanner;
@@ -103,13 +104,6 @@ public class Filelengthfinder {
 		}
 	}
 
-	/**
-	 * main Method of the {@link Filelengthfinder}
-	 * @param args Array of commandline-Arguments
-	 */
-	public static void main(String[] args) {
-		new Filelengthfinder(args);
-	}
 
 	/**
 	 * prints the help message to the commandline

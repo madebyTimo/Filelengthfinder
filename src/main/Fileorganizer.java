@@ -5,10 +5,20 @@ import java.util.ArrayList;
 import FileFinder.Filelengthfinder;
 import Tagger.Mp3Tagger;
 
+
+/**
+ * main class of the Fileorganizer.
+ * Some tools to help handle files
+ *
+ */
 public class Fileorganizer {
 	
 	private CLI cli;
 
+	/**
+	 * initial object of the Fileorganizer
+	 * @param args (non-null) the command line arguments
+	 */
 	public Fileorganizer(final String[] args) {
 		this.cli = new CLI();
 		mainMenu();
@@ -44,4 +54,24 @@ public class Fileorganizer {
 	}
 	
 
+	/**
+	 * check the command line arguments and execute them
+	 * @param args (non-null) the command line arguments
+	 */
+	private void checkCommandLineArguments(final String[] args) {
+		for (int i = 0; i < args.length; i++) {
+			if (args[i].startsWith("--help") || args[i].startsWith("-h")) {
+				printHelpMessage();
+			}
+		}
+	}
+
+
+	/**
+	 * print help-message for command line arguments
+	 */
+	private void printHelpMessage() {
+		System.out.println("Command-line arguments aren't supported yet");
+		
+	}
 }

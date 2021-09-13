@@ -22,8 +22,7 @@ With
 java -jar Fileorganizer.jar OPTIONS
 ```
 you can directly set the arguments.
-~~To see all available options use:~~
-~~```bash
+~~To see all available options use:~~ (not yet supported)
+```bash
 java -jar Fileorganizer.jar --help
-```~~
-(not yet supported)
+```

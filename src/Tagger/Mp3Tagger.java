@@ -73,7 +73,7 @@ public class Mp3Tagger {
 				tags.setArtist(cli.consoleScanner());				
 			}
 			System.out.println();
-			System.out.println("Do you want to change the tilte?");
+			System.out.println("Do you want to change the title?");
 			if(cli.showYesNoSelection()) {
 				System.out.println("Please enter the title: "); 
 				tags.setTitle(cli.consoleScanner());				

@@ -5,11 +5,13 @@ import java.nio.file.FileAlreadyExistsException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
+
+import javax.naming.OperationNotSupportedException;
+
 import main.CLI;
 
-
 /**
- * Class to do things with MP3Tags 
+ * Class to do things with MP3Tags
  * 
  */
 public class Mp3Tagger {
@@ -21,6 +23,7 @@ public class Mp3Tagger {
 
 	/**
 	 * creates an MP3 Tagger
+	 * 
 	 * @param cli for interaction with CLI
 	 */
 	public Mp3Tagger(final CLI cli) {
@@ -53,30 +56,31 @@ public class Mp3Tagger {
 			}
 		} while (selection == Integer.MIN_VALUE);
 	}
-	
+
 	/**
 	 * edit the tags of a file to user entered tags
 	 */
 	private void editTags() {
 		selectPath();
 		if (file.isDirectory()) {
-			System.out.println("Tag editing is only supported for mp3-files. \"" + file.getAbsolutePath() + "\" is a directory.");
-		}else {
+			System.out.println(
+					"Tag editing is only supported for mp3-files. \"" + file.getAbsolutePath() + "\" is a directory.");
+		} else {
 			Mp3Tags tags = tagEditor.readTags(file);
 			System.out.println("The actual tags are: ");
 			System.out.println(" Artist: " + tags.getArtist());
 			System.out.println("Title: " + tags.getTitle());
 			System.out.println();
 			System.out.println("Do you want to change the artist?");
-			if(cli.showYesNoSelection()) {
-				System.out.println("Please enter the artist: "); 
-				tags.setArtist(cli.consoleScanner());				
+			if (cli.showYesNoSelection()) {
+				System.out.println("Please enter the artist: ");
+				tags.setArtist(cli.consoleScanner());
 			}
 			System.out.println();
 			System.out.println("Do you want to change the title?");
-			if(cli.showYesNoSelection()) {
-				System.out.println("Please enter the title: "); 
-				tags.setTitle(cli.consoleScanner());				
+			if (cli.showYesNoSelection()) {
+				System.out.println("Please enter the title: ");
+				tags.setTitle(cli.consoleScanner());
 			}
 			System.out.println();
 			tagEditor.writeTags(file, tags);
@@ -97,11 +101,16 @@ public class Mp3Tagger {
 				filesQueue.add(file);
 			}
 			File actualFile;
-			while(!filesQueue.isEmpty()) {
+			while (!filesQueue.isEmpty()) {
 				actualFile = filesQueue.remove();
 				if (!actualFile.isDirectory()) {
 					if (actualFile.getName().endsWith(".mp3")) {
-						filenameToTags(actualFile);
+						try {
+							filenameToTags(actualFile);
+						} catch (OperationNotSupportedException e) {
+							System.out
+									.println("ERROR: with \" " + actualFile.getAbsolutePath() + "\" " + e.getMessage());
+						}
 					} else {
 						System.out.println("File \"" + actualFile.getAbsolutePath() + "\" is no MP3");
 					}
@@ -112,25 +121,34 @@ public class Mp3Tagger {
 				}
 			}
 		} else {
-			filenameToTags(this.file);
+			try {
+				filenameToTags(this.file);
+			} catch (OperationNotSupportedException e) {
+				System.out.println("ERROR: " + e.getMessage());
+			}
 		}
 	}
 
 	/**
 	 * edit the tags with information of the filename
+	 * 
 	 * @param file the file to be edited
+	 * @throws OperationNotSupportedException if the file don't uses the correct
+	 *                                        naming-pattern
 	 */
-	private void filenameToTags(final File file) {
+	private void filenameToTags(final File file) throws OperationNotSupportedException {
 		if (file.getName().endsWith(".mp3")) {
 			String fileName = file.getName().substring(0, file.getName().length() - 4);
 			String[] tags = fileName.split(" - ");
+			if (tags.length != 2) {
+				throw new OperationNotSupportedException("The file don't uses the correct naming-pattern");
+			}
 			Mp3Tags mp3Tags = new Mp3Tags(tags[1], tags[0]);
 			this.tagEditor.writeTags(file, mp3Tags);
 			System.out.println("Edited tags of \"" + file.getAbsolutePath() + "\"");
 		}
 	}
 
-	
 	/**
 	 * let the user select a path over CLI
 	 */
@@ -161,7 +179,7 @@ public class Mp3Tagger {
 				filesQueue.add(file);
 			}
 			File actualFile;
-			while(!filesQueue.isEmpty()) {
+			while (!filesQueue.isEmpty()) {
 				actualFile = filesQueue.remove();
 				if (!actualFile.isDirectory()) {
 					if (actualFile.getName().endsWith(".mp3")) {
@@ -182,6 +200,7 @@ public class Mp3Tagger {
 
 	/**
 	 * edit the filename with information of the tags
+	 * 
 	 * @param file the file to be edited
 	 */
 	private void tagsToFilename(final File file) {
@@ -196,24 +215,25 @@ public class Mp3Tagger {
 				} catch (FileAlreadyExistsException e) {
 					System.out.println("ERROR: Editing Filename of \"" + oldPath + "\" to \"" + newName
 							+ "\" aborted. File already exists!");
-				} 
-			}else {
+				}
+			} else {
 				System.out.println("ERROR: File \"" + oldPath + "\" aborted. Tags invalid!");
 			}
-			
+
 		}
 
 	}
 
 	/**
 	 * Rename the file
-	 * @param file file to be renamed
+	 * 
+	 * @param file    file to be renamed
 	 * @param newName new name of the file
 	 * @throws FileAlreadyExistsException if file already exists
 	 */
 	private void renameFile(final File file, final String newName) throws FileAlreadyExistsException {
 		File newFilePath = new File(file.getParent() + "/" + newName);
-		if(newFilePath.exists()) {
+		if (newFilePath.exists()) {
 			throw new FileAlreadyExistsException(newFilePath.getAbsolutePath());
 		}
 		file.renameTo(newFilePath);

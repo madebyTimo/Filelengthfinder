@@ -4,10 +4,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
-
-import org.jaudiotagger.audio.exceptions.UnableToRenameFileException;
-
-import FileFinder.Filelengthfinder;
 import main.CLI;
 
 

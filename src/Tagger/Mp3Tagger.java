@@ -45,7 +45,7 @@ public class Mp3Tagger {
 		do {
 			selection = cli.showSimpleMenu(menu);
 			if (selection == 1) {
-				// TODO edit Tags
+				editTags();
 			} else if (selection == 2) {
 				filenameToTags();
 			} else if (selection == 3) {
@@ -55,6 +55,36 @@ public class Mp3Tagger {
 				selection = Integer.MIN_VALUE;
 			}
 		} while (selection == Integer.MIN_VALUE);
+	}
+	
+	/**
+	 * edit the tags of a file to user entered tags
+	 */
+	private void editTags() {
+		selectPath();
+		if (file.isDirectory()) {
+			System.out.println("Tag editing is only supported for media-files. \"" + file.getAbsolutePath() + "\" is a directory.");
+		}else {
+			Mp3Tags tags = tagEditor.readTags(file);
+			System.out.println("The actual tags are: ");
+			System.out.println(" Artist: " + tags.getArtist());
+			System.out.println("Title: " + tags.getTitle());
+			System.out.println();
+			System.out.println("Do you want to change the artist?");
+			if(cli.showYesNoSelection()) {
+				System.out.println("Please enter the artist: "); 
+				tags.setArtist(cli.consoleScanner());				
+			}
+			System.out.println();
+			System.out.println("Do you want to change the tilte?");
+			if(cli.showYesNoSelection()) {
+				System.out.println("Please enter the title: "); 
+				tags.setTitle(cli.consoleScanner());				
+			}
+			System.out.println();
+			tagEditor.writeTags(file, tags);
+			System.out.println("Wrote new tags to \"" + file.getAbsolutePath() + "\".");
+		}
 	}
 
 	/**

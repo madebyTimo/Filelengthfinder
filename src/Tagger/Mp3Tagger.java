@@ -1,6 +1,7 @@
 package Tagger;
 
 import java.io.File;
+import java.nio.file.FileAlreadyExistsException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -188,8 +189,13 @@ public class Mp3Tagger {
 			Mp3Tags tags = tagEditor.readTags(file);
 			String oldPath = file.getAbsolutePath();
 			String newName = tags.getArtist() + " - " + tags.getTitle() + ".mp3";
-			renameFile(file, newName);
-			System.out.println("Edited Filename of \"" + oldPath + "\" to \"" + newName + "\"");
+			try {
+				renameFile(file, newName);
+				System.out.println("Edited Filename of \"" + oldPath + "\" to \"" + newName + "\"");
+			} catch (FileAlreadyExistsException e) {
+				System.out.println("ERROR: Editing Filename of \"" + oldPath + "\" to \"" + newName + "\" aborted. File already exists!");
+			}
+			
 		}
 
 	}
@@ -198,9 +204,13 @@ public class Mp3Tagger {
 	 * Rename the file
 	 * @param file file to be renamed
 	 * @param newName new name of the file
+	 * @throws FileAlreadyExistsException if file already exists
 	 */
-	private void renameFile(final File file, final String newName) {
+	private void renameFile(final File file, final String newName) throws FileAlreadyExistsException {
 		File newFilePath = new File(file.getParent() + "/" + newName);
+		if(newFilePath.exists()) {
+			throw new FileAlreadyExistsException(newFilePath.getAbsolutePath());
+		}
 		file.renameTo(newFilePath);
 	}
 

@@ -60,7 +60,7 @@ public class Mp3Tagger {
 	private void editTags() {
 		selectPath();
 		if (file.isDirectory()) {
-			System.out.println("Tag editing is only supported for media-files. \"" + file.getAbsolutePath() + "\" is a directory.");
+			System.out.println("Tag editing is only supported for mp3-files. \"" + file.getAbsolutePath() + "\" is a directory.");
 		}else {
 			Mp3Tags tags = tagEditor.readTags(file);
 			System.out.println("The actual tags are: ");

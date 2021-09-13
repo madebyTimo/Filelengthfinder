@@ -55,6 +55,12 @@ public class Mp3TagEditor {
 		try {
 			AudioFile audioFile = AudioFileIO.read(file);
 			Tag tag = audioFile.getTag();
+			if(!tag.hasField(FieldKey.ARTIST)) {
+				tag.addField(FieldKey.ARTIST);
+			}
+			if(!tag.hasField(FieldKey.TITLE)) {
+				tag.addField(FieldKey.TITLE);
+			}
 			tag.setField(FieldKey.ARTIST,tags.getArtist());
 			tag.setField(FieldKey.TITLE, tags.getTitle());
 			audioFile.commit();

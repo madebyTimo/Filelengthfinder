@@ -188,12 +188,17 @@ public class Mp3Tagger {
 		if (file.getName().endsWith(".mp3")) {
 			Mp3Tags tags = tagEditor.readTags(file);
 			String oldPath = file.getAbsolutePath();
-			String newName = tags.getArtist() + " - " + tags.getTitle() + ".mp3";
-			try {
-				renameFile(file, newName);
-				System.out.println("Edited Filename of \"" + oldPath + "\" to \"" + newName + "\"");
-			} catch (FileAlreadyExistsException e) {
-				System.out.println("ERROR: Editing Filename of \"" + oldPath + "\" to \"" + newName + "\" aborted. File already exists!");
+			if (!tags.getArtist().isBlank() && !tags.getTitle().isBlank()) {
+				String newName = tags.getArtist() + " - " + tags.getTitle() + ".mp3";
+				try {
+					renameFile(file, newName);
+					System.out.println("Edited Filename of \"" + oldPath + "\" to \"" + newName + "\"");
+				} catch (FileAlreadyExistsException e) {
+					System.out.println("ERROR: Editing Filename of \"" + oldPath + "\" to \"" + newName
+							+ "\" aborted. File already exists!");
+				} 
+			}else {
+				System.out.println("ERROR: File \"" + oldPath + "\" aborted. Tags invalid!");
 			}
 			
 		}

@@ -1,6 +1,8 @@
+package FileFinder;
 import java.io.File;
 import java.io.FileFilter;
-import java.util.Scanner;
+
+import main.CLI;
 
 
 /**
@@ -11,12 +13,23 @@ public class Filelengthfinder {
 
 	boolean aUseFullPathName = false;
 	boolean aIncludeFoldernames = false;
+	final CLI cli;
 
+	/**
+	 * Create new Filelengthfinder
+	 * @param cli for interaction with CLI
+	 */
+	public Filelengthfinder(final CLI cli) {
+		this(new String[0], cli);
+	}
+	
+	
 	/**
 	 * main Class of the Filelengthfinder
 	 * @param pArgs Array of commandline-Arguments
 	 */
-	public Filelengthfinder(final String[] pArgs) {
+	public Filelengthfinder(final String[] pArgs, final CLI cli) {
+		this.cli=cli;
 		String path = null;
 		int length = -1;
 		boolean isSetUseFullPathName = false;
@@ -53,14 +66,14 @@ public class Filelengthfinder {
 		while (length == -1) {
 			System.out.println("How long should the filename at least be?");
 			try {
-				length = Integer.parseInt(consoleScanner());
+				length = Integer.parseInt(this.cli.consoleScanner());
 			} catch (NumberFormatException e) {
 				System.out.println("The input cannot be converted to a number");
 			}
 		}
 		while (!isSetUseFullPathName) {
 			System.out.println("Include the full path? (yes/no)");
-			String input = consoleScanner();
+			String input = this.cli.consoleScanner();
 			if (input.equals("yes")) {
 				aUseFullPathName = true;
 				isSetUseFullPathName = true;
@@ -72,7 +85,7 @@ public class Filelengthfinder {
 		if (!aUseFullPathName) {
 			while (!isSetIncludeFoldernames) {
 				System.out.println("Also search for foldernames? (yes/no)");
-				String input = consoleScanner();
+				String input = this.cli.consoleScanner();
 				if (input.equals("yes")) {
 					aIncludeFoldernames = true;
 					isSetIncludeFoldernames = true;
@@ -86,7 +99,7 @@ public class Filelengthfinder {
 		}
 		while (path == null || path.length() == 0) {
 			System.out.println("On which Path should be searched?");
-			path = consoleScanner();
+			path = this.cli.consoleScanner();
 		}
 
 		try {
@@ -103,13 +116,6 @@ public class Filelengthfinder {
 		}
 	}
 
-	/**
-	 * main Method of the {@link Filelengthfinder}
-	 * @param args Array of commandline-Arguments
-	 */
-	public static void main(String[] args) {
-		new Filelengthfinder(args);
-	}
 
 	/**
 	 * prints the help message to the commandline
@@ -125,17 +131,6 @@ public class Filelengthfinder {
 		System.out.println("-fdn= wether to include foldernames to the searched filenames or not (yes/no). If -fph=true then it is automaticcaly \"yes\".");
 		System.out.println();
 		System.out.println("Example: java -jar Filenamelengthfinder.jar -dir=/media -len=145 -fph=no -fdn=no");
-	}
-
-	/**
-	 * scans the commandline for the written line
-	 * @return the written line
-	 */
-	private String consoleScanner() {
-		Scanner scanner = new Scanner(System.in);
-		String eingabe = scanner.nextLine();
-//		scanner.close();
-		return eingabe;
 	}
 
 	

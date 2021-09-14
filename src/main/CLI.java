@@ -60,21 +60,22 @@ public class CLI {
 		List<String> options = new ArrayList<String>();
 		options.add("yes");
 		options.add("no");
-		System.out.println();
-		int counter = 1;
-		for (String option : options) {
-			System.out.println(counter++ + ". " + option);
-		}
-		System.out.println();
-		System.out.print("Your selection: ");
-		String input = consoleScanner();
-		System.out.println();
 		while (true) {
+			System.out.println();
+			int counter = 1;
+			for (String option : options) {
+				System.out.println(counter++ + ". " + option);
+			}
+			System.out.println();
+			System.out.print("Your selection: ");
+			String input = consoleScanner();
+			System.out.println();
+
 			try {
 				int selection = Integer.parseInt(input);
-				if(selection == 1) {
+				if (selection == 1) {
 					return true;
-				}else if(selection == 2) {
+				} else if (selection == 2) {
 					return false;
 				}
 			} catch (NumberFormatException e) {
